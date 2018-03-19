@@ -52,6 +52,10 @@
 * 每个页面都生成一个对应的js文件。具体配置见`webpack.config.js`中注释。
 
 
+## dev
+在`webpack.config.js`通过设定`cur_page`常量来决定当运行`npm run dev`时打开哪一页
+
+
 ## build
 1. 理想的build情况是，所有的html文件在`/dist`目录，其他文件在`/dist/static`目录。
 2. 不过不知道怎么实现，现在只有html文件可以存在子目录里。

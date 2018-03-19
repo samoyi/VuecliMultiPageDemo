@@ -3,6 +3,10 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+// 设置执行`npm run dev`时打开哪一页
+const cur_page = 'test';
+
+
  // 放置所有页面的路径
  // 内部的每个文件夹都会被认为是一个页面组件
 const sPagesDir = './src/pages/';
@@ -114,7 +118,7 @@ module.exports = {
         noInfo: true,
         overlay: true,
         // npm run dev 默认启动 index.html，这里做如下修改
-        openPage: 'dist/html/home.html',
+        openPage: 'dist/html/' + cur_page + '.html',
     },
     performance: {
         hints: false

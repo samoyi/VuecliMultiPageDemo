@@ -11,7 +11,7 @@ export default {
     data () {
         return {
             curPage: 'test.html',
-            linkTo: 'home.html'
+            linkTo: 'index.html'
         }
     }
 }
