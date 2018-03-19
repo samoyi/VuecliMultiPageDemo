@@ -1,7 +1,6 @@
-# Vue-cli多页面应用的配置修改
+# Vue-cli多页面应用Demo
 * 因为Vue-cli默认是构建单页面应用，因此需要做一些修改。
-* 使用的Vue-cli 2.x版本，模板为`webpack-simple`。
-webpack的配置修改直接看`webpack.config.js`中的注释
+* 使用Vue-cli 2.x版本，模板为`webpack-simple`。
 
 
 ## 概述
