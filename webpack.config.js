@@ -7,30 +7,45 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
  // 内部的每个文件夹都会被认为是一个页面组件
 const sPagesDir = './src/pages/';
 
+// 每个页面都使用HtmlWebpackPlugin设置相应的配置来生成html文件
+let aHWP = []; // 若干个配置
+
+// 读取页面目录页页面title的映射
+const oTitle = JSON.parse(fs.readFileSync('src/titles.json'));
+
 // 遍历sPagesDir生成的多入口对象
 const oEntries = ((sPagesDir)=>{
     const contents = fs.readdirSync(sPagesDir);
-
     let oEntries = {};
+    // src/pages/下的每个目录会被认为是一个页面组件
     contents.forEach(item=>{
         if(fs.statSync(sPagesDir+item).isDirectory()){
+            // 每个页面目录下的main.js文件作为该页面的entry文件
             oEntries[item] = sPagesDir+item + '/main.js';
+            // 为每个页面配置要生成的html入口文件
+            aHWP.push(new HtmlWebpackPlugin({
+                template: 'template.html', // 使用同一个模板
+                // 所有html统一放在 /dist/html 目录下
+                filename: 'html/' + item + '.html', // html文件名为页面组件名
+                title: oTitle[item], // 每个页面的title
+                // 默认时，生成的html会引用所有生成的js文件。这里设置为只引用自己的。
+                chunks: [item],
+            }));
         }
     });
     return oEntries;
 })(sPagesDir);
-console.log(oEntries);
+
 
 module.exports = {
     entry: oEntries,
     output: {
         path: path.resolve(__dirname, './dist'),
         publicPath: '/dist/',
-        filename: '[name].js' // https://webpack.js.org/concepts/output/#multiple-entry-points
+        // 多页面出口的设置参考文档 https://webpack.js.org/concepts/output/#multiple-entry-points
+        filename: '[name].js'
     },
-    plugins: [
-        new HtmlWebpackPlugin()
-    ],
+    plugins: aHWP,
     module: {
         rules: [
             {
@@ -61,9 +76,6 @@ module.exports = {
                 loader: 'vue-loader',
                 options: {
                     loaders: {
-                        // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
-                        // the "scss" and "sass" values for the lang attribute to the right configs here.
-                        // other preprocessors should work out of the box, no loader config like this necessary.
                         'scss': [
                             'vue-style-loader',
                             'css-loader',
@@ -75,7 +87,6 @@ module.exports = {
                             'sass-loader?indentedSyntax'
                         ]
                     }
-                    // other vue-loader options go here
                 }
             },
             {
@@ -101,7 +112,9 @@ module.exports = {
     devServer: {
         historyApiFallback: true,
         noInfo: true,
-        overlay: true
+        overlay: true,
+        // npm run dev 默认启动 index.html，这里做如下修改
+        openPage: 'dist/html/home.html',
     },
     performance: {
         hints: false
@@ -111,7 +124,6 @@ module.exports = {
 
 if (process.env.NODE_ENV === 'production') {
     module.exports.devtool = '#source-map'
-    // http://vue-loader.vuejs.org/en/workflow/production.html
     module.exports.plugins = (module.exports.plugins || []).concat([
         new webpack.DefinePlugin({
             'process.env': {

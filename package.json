@@ -1,6 +1,6 @@
 {
-    "name": "czkam_vuecli",
-    "description": "A Vue.js project",
+    "name": "vue-cli-multi-page-demo",
+    "description": "Multi-Page demo using Vue-cli",
     "version": "1.0.0",
     "author": "samoyi <leening529@163.com>",
     "license": "MIT",

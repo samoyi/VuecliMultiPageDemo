@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="wrapper">
         <img src="../../assets/logo.png">
         <h1>This is {{curPage}}</h1>
         <h1>To <a :href="linkTo">{{ linkTo }}</a></h1>
@@ -8,18 +8,17 @@
 
 <script>
 export default {
-    name: 'app',
     data () {
         return {
-            curPage: 'test.html',
-            linkTo: 'index.html'
+            curPage: 'home.html',
+            linkTo: 'test.html'
         }
     }
 }
 </script>
 
 <style lang="scss">
-#app {
+#wrapper {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
