@@ -14,8 +14,32 @@ const sPagesDir = './src/pages/';
 // 每个页面都使用HtmlWebpackPlugin设置相应的配置来生成html文件
 let aHWP = []; // 若干个配置
 
-// 读取页面目录页页面title的映射
-const oTitle = JSON.parse(fs.readFileSync('src/titles.json'));
+// 读取页面配置
+const oPageConfig = JSON.parse(fs.readFileSync('src/pageConfig.json'));
+
+function generateLinkNodes(sPageName){
+    const aCSS = oPageConfig[sPageName].css;
+    if(aCSS && aCSS.length){
+        return aCSS.reduce((acc, cur)=>{
+            return acc + '<link rel="stylesheet" type="text/css" href="'
+                    + cur + '">';
+        }, '');
+    }
+    else{
+        return '';
+    }
+}
+function generateScriptNodes(sPageName){
+    const aJS = oPageConfig[sPageName].js;
+    if(aJS && aJS.length){
+        return aJS.reduce((acc, cur)=>{
+            return acc + '<script src="' + cur + '"></script>';
+        }, '');
+    }
+    else{
+        return '';
+    }
+}
 
 // 遍历sPagesDir生成的多入口对象
 const oEntries = ((sPagesDir)=>{
@@ -27,11 +51,15 @@ const oEntries = ((sPagesDir)=>{
             // 每个页面目录下的main.js文件作为该页面的entry文件
             oEntries[item] = sPagesDir+item + '/main.js';
             // 为每个页面配置要生成的html入口文件
+            // console.log(oPageConfig[item]);
+            // console.log(item);
             aHWP.push(new HtmlWebpackPlugin({
                 template: 'template.html', // 使用同一个模板
                 // 所有html统一放在 /dist/html 目录下
                 filename: 'html/' + item + '.html', // html文件名为页面组件名
-                title: oTitle[item], // 每个页面的title
+                title: oPageConfig[item].title, // 每个页面的title
+                css: generateLinkNodes(item),
+                js: generateScriptNodes(item),
                 // 默认时，生成的html会引用所有生成的js文件。这里设置为只引用自己的。
                 chunks: [item],
             }));

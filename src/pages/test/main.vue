@@ -7,6 +7,9 @@
 </template>
 
 <script>
+
+console.log(typeof $); // undefined
+
 export default {
     data () {
         return {

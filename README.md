@@ -30,15 +30,18 @@
 2. 使用[html-webpack-plugin](https://www.npmjs.com/package/html-webpack-plugin)自
 动生成dev和build时的html文件。
 3. 安装并在`webpack.config.js`中引入，配置方法见`webpack.config.js`中注释。
-4. 因为每个html入口文件都差不多，所以可以使用同一模板文件。把`index.html`改成模板文件：
+4. 因为每个html入口文件都差不多，所以可以使用同一模板文件。把`index.html`改成模板文件
+`template.html`：
     1. `title`标签使用模板语法，通过html-webpack-plugin来自动插入对应的`title`
     2. 删除`script`标签，通过html-webpack-plugin来自动引用对应的`build.js`文件
     3. `div`的`id`改为`wrapper`，作为每个页面的最外层节点，比`app`语义正确。
     4. 把`main.js`和`main.vue`中的`id`都从`app`改成`wrapper`
 5. 因为是用同一个模板文件，所以需要在配置中给每个生成的html文件指定的对应的页面title。  
-    `src/titles.json`中保存页面目录到页面title的映射，使用html-webpack-plugin来设置。
-6. 单页面模式时，执行`npm run dev`时，DevServer默认启动`localhost:3000`，这里要改为启
-    动首页文件`localhost:8080/html/home.html`，见`webpack.config.js`中的修改注释。
+    `src/pageConfig.json`中保存每个页面的title，使用html-webpack-plugin来设置。
+6. 少数情况下可能需要引用外部的css或js文件。如果不是每个页面都引用，则不能直接写在
+`template.html`里。因此也要在`src/pageConfig.json`设置每个页面需要引用的外部css和js
+文件路径。设置方式参考现在的`src/pageConfig.json`文件。css和js文件路径都要以数组的形式。
+如果没有，可以写空数组，也可以直接不写该属性。
 
 
 ## 多entry
